@@ -1,0 +1,213 @@
+# Configurable email categories.
+# The skill and dashboard both read this file. Edit freely; reload the dashboard to see changes.
+
+categories:
+  - id: scan_design
+    name: 扫描设计件
+    name_en: Scan & Design Files
+    color: "#06b6d4"
+    keywords:
+      - stl
+      - STL
+      - scan
+      - 扫描
+      - 设计件
+      - 诊所
+      - clinic
+      - dental
+      - implant
+      - design file
+      - 3D
+      - model
+      - 模型
+    key_fields:
+      - clinic_name
+      - patient_id
+      - design_type
+      - file_count
+    draft_template_zh: |
+      您好 {{clinic_name}}，
+
+      已收到患者 {{patient_id}} 的 {{design_type}} 设计文件（共 {{file_count}} 个），
+      正在处理中，完成后会第一时间通知您。
+
+      谢谢！
+    draft_template_en: |
+      Hi {{clinic_name}},
+
+      Received {{design_type}} design file(s) ({{file_count}} file(s)) for patient {{patient_id}}.
+      We are processing and will notify you upon completion.
+
+      Thanks!
+
+  - id: eship
+    name: 快递物流
+    name_en: Shipping & Logistics
+    color: "#f97316"
+    keywords:
+      - eship
+      - e-ship
+      - tracking
+      - shipment
+      - shipped
+      - courier
+      - FedEx
+      - UPS
+      - DHL
+      - Purolator
+      - Canada Post
+      - parcel
+      - 快递
+      - 发货
+      - 追踪
+      - 运单
+      - 物流
+      - 签收
+      - delivery
+      - dispatch
+      - waybill
+    key_fields:
+      - carrier
+      - tracking_no
+      - sender
+      - expected_delivery
+    draft_template_zh: |
+      您好，
+
+      已确认快递信息：承运商 {{carrier}}，运单号 {{tracking_no}}，
+      寄件方 {{sender}}，预计 {{expected_delivery}} 到达。
+
+      谢谢！
+    draft_template_en: |
+      Hi,
+
+      Shipment confirmed: carrier {{carrier}}, tracking {{tracking_no}},
+      from {{sender}}, expected delivery {{expected_delivery}}.
+
+      Thanks!
+
+  - id: invoice_inquiry
+    name: 发票询问
+    name_en: Invoice Inquiry
+    color: "#3b82f6"
+    keywords:
+      - invoice
+      - 发票
+      - billing
+      - 账单
+      - receipt
+      - 收据
+      - tax invoice
+      - 税票
+      - 开票
+      - 请开发票
+      - need invoice
+      - 发票号
+      - invoice number
+    key_fields:
+      - requester
+      - invoice_ref
+      - amount
+      - inquiry_type
+    draft_template_zh: |
+      您好 {{requester}}，
+
+      已收到关于发票 {{invoice_ref}} 的询问（金额 {{amount}}）。
+      我们会尽快处理您的请求并回复。
+
+      谢谢！
+    draft_template_en: |
+      Hi {{requester}},
+
+      Received your inquiry regarding invoice {{invoice_ref}} ({{amount}}).
+      We will process your request and get back to you shortly.
+
+      Thanks!
+
+  - id: payment
+    name: 付款收款
+    name_en: Payments
+    color: "#10b981"
+    keywords:
+      - payment
+      - etransfer
+      - e-transfer
+      - cheque
+      - check
+      - 付款
+      - 收款
+      - transfer
+      - wire
+      - remittance
+      - 汇款
+      - 转账
+      - 打款
+      - 欠款
+      - 应付
+      - 应收
+      - overdue
+      - due
+      - 到期
+      - bill
+      - 缴费
+      - interac
+    key_fields:
+      - payment_type
+      - amount
+      - payer
+      - due_date
+      - reference
+    draft_template_zh: |
+      您好 {{payer}}，
+
+      已收到 {{payment_type}} 付款通知，金额 {{amount}}，参考号 {{reference}}，
+      到期日 {{due_date}}。我们会及时处理。
+
+      谢谢！
+    draft_template_en: |
+      Hi {{payer}},
+
+      Received {{payment_type}} payment notice for {{amount}}, reference {{reference}},
+      due {{due_date}}. We will process accordingly.
+
+      Thanks!
+
+  - id: spam
+    name: 垃圾/通知
+    name_en: Spam & Notifications
+    color: "#94a3b8"
+    keywords:
+      - no-reply
+      - noreply
+      - newsletter
+      - unsubscribe
+      - notification
+      - do not reply
+      - automated
+      - alert
+      - new sign-in detected
+      - new app connected
+      - security info was added
+      - security info verification
+      - Microsoft account team
+      - account protection
+      - promotional
+      - offer
+      - discount
+      - 通知
+      - 订阅
+      - 退订
+      - 广告
+      - 营销
+    key_fields: []
+    draft_template_zh: ""
+    draft_template_en: ""
+
+  - id: other
+    name: 其它
+    name_en: Other
+    color: "#64748b"
+    keywords: []
+    key_fields: []
+    draft_template_zh: ""
+    draft_template_en: ""
