@@ -17,3 +17,10 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+[dependency-groups]
+dev = [
+    "playwright>=1.59.0",
+    "pytest>=9.0.3",
+    "pytest-playwright>=0.7.2",
+]
