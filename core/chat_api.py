@@ -10,10 +10,18 @@ from pathlib import Path
 
 
 def _find_claude() -> str:
+    import glob as _glob
     candidates = [
         shutil.which("claude"),
-        r"C:\Users\admin\AppData\Roaming\npm\claude.cmd",
+        os.path.join(os.environ.get("APPDATA", ""), "npm", "claude.cmd"),
     ]
+    # VS Code extension ships claude.exe — discover any installed version
+    vscode_pattern = os.path.join(
+        os.environ.get("USERPROFILE", ""),
+        ".vscode", "extensions", "anthropic.claude-code-*",
+        "resources", "native-binary", "claude.exe",
+    )
+    candidates.extend(_glob.glob(vscode_pattern))
     for c in candidates:
         if c and Path(c).exists():
             return c

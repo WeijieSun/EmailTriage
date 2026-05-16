@@ -59,6 +59,360 @@ def _account_chip(account_id: str | None) -> str:
 
 st.set_page_config(page_title="Email Triage", page_icon="📧", layout="wide")
 
+# ── Global Design System ─────────────────────────────────────────────────────
+st.markdown("""
+<style>
+/* ── Fonts & Base ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ── App Background ── */
+.stApp {
+    background: #f0f4f8;
+}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0d1117 0%, #161b22 60%, #0d1117 100%) !important;
+    border-right: 1px solid rgba(99,102,241,0.25) !important;
+}
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 1.5rem;
+}
+[data-testid="stSidebar"] .stMarkdown h3 {
+    color: #94a3b8 !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.75rem !important;
+}
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div {
+    color: #cbd5e1 !important;
+}
+[data-testid="stSidebar"] .stRadio label,
+[data-testid="stSidebar"] .stCheckbox label {
+    color: #e2e8f0 !important;
+    font-size: 0.88rem !important;
+}
+[data-testid="stSidebar"] hr {
+    border-color: rgba(99,102,241,0.2) !important;
+    margin: 1rem 0 !important;
+}
+[data-testid="stSidebar"] .stSelectbox > div > div {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(99,102,241,0.3) !important;
+    border-radius: 8px !important;
+    color: #e2e8f0 !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(99,102,241,0.2) !important;
+    border-radius: 10px !important;
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+    color: #f87171 !important;
+    font-size: 0.85rem !important;
+}
+
+/* ── Main area container ── */
+.main .block-container {
+    padding: 2rem 2.5rem 3rem !important;
+    max-width: 1400px !important;
+}
+
+/* ── Title ── */
+h1 {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+    letter-spacing: -0.03em !important;
+}
+
+/* ── Metric Cards ── */
+[data-testid="stMetric"] {
+    background: #ffffff !important;
+    border-radius: 14px !important;
+    padding: 1.4rem 1.6rem !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05), 0 0 0 1px rgba(99,102,241,0.04) !important;
+    border-top: 3px solid #6366f1 !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(99,102,241,0.12) !important;
+}
+[data-testid="stMetricLabel"] {
+    color: #64748b !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+[data-testid="stMetricValue"] {
+    color: #0f172a !important;
+    font-size: 2.4rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* ── Buttons ── */
+[data-testid="stButton"] > button {
+    border-radius: 10px !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    padding: 0.55rem 1.2rem !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    transition: all 0.2s ease !important;
+    letter-spacing: 0.01em !important;
+}
+[data-testid="stButton"] > button[kind="primary"],
+[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.35) !important;
+}
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    box-shadow: 0 6px 20px rgba(99,102,241,0.5) !important;
+    transform: translateY(-1px) !important;
+}
+[data-testid="stButton"] > button[kind="secondary"]:hover {
+    background: #f1f5f9 !important;
+    border-color: #6366f1 !important;
+    color: #6366f1 !important;
+}
+
+/* ── Tabs ── */
+[role="tablist"] {
+    background: transparent !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    gap: 0 !important;
+    padding-bottom: 0 !important;
+}
+[role="tab"] {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    margin-bottom: -2px !important;
+    color: #64748b !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    padding: 0.6rem 1rem !important;
+    border-radius: 0 !important;
+    transition: all 0.2s !important;
+}
+[role="tab"]:hover {
+    color: #6366f1 !important;
+    background: rgba(99,102,241,0.05) !important;
+}
+[role="tab"][aria-selected="true"] {
+    color: #6366f1 !important;
+    border-bottom: 2px solid #6366f1 !important;
+    font-weight: 600 !important;
+}
+
+/* ── Expanders (Email cards) ── */
+[data-testid="stExpander"] {
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.07) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04) !important;
+    overflow: hidden !important;
+    margin-bottom: 0.6rem !important;
+    transition: box-shadow 0.2s !important;
+}
+[data-testid="stExpander"]:hover {
+    box-shadow: 0 4px 16px rgba(99,102,241,0.1) !important;
+}
+[data-testid="stExpander"] summary {
+    padding: 0.9rem 1.2rem !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    color: #1e293b !important;
+}
+[data-testid="stExpander"] summary:hover {
+    background: rgba(99,102,241,0.03) !important;
+}
+[data-testid="stExpander"] > div:last-child {
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+/* ── Alerts / Banners ── */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    border: none !important;
+    font-size: 0.875rem !important;
+}
+[data-testid="stAlert"][data-baseweb="notification"] {
+    background: rgba(99,102,241,0.06) !important;
+    border-left: 4px solid #6366f1 !important;
+}
+
+/* ── Success / Warning banners ── */
+div[class*="stSuccess"] {
+    background: rgba(16,185,129,0.08) !important;
+    border: 1px solid rgba(16,185,129,0.25) !important;
+    border-radius: 12px !important;
+    color: #065f46 !important;
+}
+div[class*="stWarning"] {
+    background: rgba(245,158,11,0.08) !important;
+    border: 1px solid rgba(245,158,11,0.25) !important;
+    border-radius: 12px !important;
+}
+
+/* ── Progress bars ── */
+[data-testid="stProgress"] > div > div {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6) !important;
+    border-radius: 999px !important;
+}
+[data-testid="stProgress"] > div {
+    background: #e2e8f0 !important;
+    border-radius: 999px !important;
+    height: 6px !important;
+}
+
+/* ── Text inputs ── */
+[data-testid="stTextInput"] input,
+[data-testid="stDateInput"] input {
+    border-radius: 9px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.875rem !important;
+    padding: 0.55rem 0.9rem !important;
+    transition: border-color 0.2s !important;
+}
+[data-testid="stTextInput"] input:focus,
+[data-testid="stDateInput"] input:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+}
+
+/* ── Text areas ── */
+textarea {
+    border-radius: 9px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.875rem !important;
+    transition: border-color 0.2s !important;
+}
+textarea:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+}
+
+/* ── Info boxes (summaries) ── */
+[data-testid="stInfo"] {
+    background: linear-gradient(135deg, rgba(6,182,212,0.07), rgba(99,102,241,0.07)) !important;
+    border: 1px solid rgba(6,182,212,0.25) !important;
+    border-radius: 10px !important;
+    color: #0e7490 !important;
+}
+
+/* ── Multiselect / Select tags ── */
+[data-testid="stMultiSelect"] span[data-baseweb="tag"] {
+    background: rgba(99,102,241,0.12) !important;
+    color: #6366f1 !important;
+    border-radius: 999px !important;
+    border: none !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+}
+/* Sidebar multiselect input text — must be dark on white dropdown bg */
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] input,
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] [data-baseweb="input"] input {
+    color: #1e293b !important;
+}
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] [data-baseweb="select"] {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(99,102,241,0.3) !important;
+    border-radius: 9px !important;
+}
+/* Dropdown menu items */
+[data-testid="stSidebar"] li[role="option"] {
+    color: #1e293b !important;
+    background: white !important;
+}
+[data-testid="stSidebar"] li[role="option"]:hover {
+    background: rgba(99,102,241,0.08) !important;
+}
+/* Tags in sidebar multiselect */
+[data-testid="stSidebar"] [data-testid="stMultiSelect"] span[data-baseweb="tag"] {
+    background: rgba(99,102,241,0.85) !important;
+    color: white !important;
+}
+
+/* ── Checkboxes ── */
+[data-testid="stCheckbox"] span[aria-checked="true"] {
+    background: #6366f1 !important;
+    border-color: #6366f1 !important;
+}
+
+/* ── Dividers ── */
+hr {
+    border-color: rgba(0,0,0,0.06) !important;
+    margin: 1.5rem 0 !important;
+}
+
+/* ── Spinner ── */
+[data-testid="stSpinner"] {
+    color: #6366f1 !important;
+}
+
+/* ── JSON display ── */
+[data-testid="stJson"] {
+    border-radius: 10px !important;
+    border: 1px solid rgba(0,0,0,0.07) !important;
+    background: #f8fafc !important;
+}
+
+/* ── Toast notifications ── */
+[data-testid="stToast"] {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+/* ── Containers with border ── */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: 14px !important;
+    border: 1px solid rgba(0,0,0,0.07) !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+}
+
+/* ── Caption text ── */
+.stCaption, [data-testid="stCaptionContainer"] {
+    color: #94a3b8 !important;
+    font-size: 0.78rem !important;
+}
+
+/* ── Code/mono text ── */
+code {
+    background: rgba(99,102,241,0.08) !important;
+    color: #6366f1 !important;
+    border-radius: 5px !important;
+    padding: 0.1em 0.4em !important;
+    font-size: 0.85em !important;
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+</style>
+""", unsafe_allow_html=True)
+
 
 # ----------------- DB helpers -----------------
 
@@ -194,11 +548,19 @@ def save_chat_history(msgs: list[dict]) -> None:
 
 
 def _find_claude() -> str:
+    import glob as _glob
     candidates = [
         shutil.which("claude"),
-        r"C:\Users\admin\AppData\Roaming\npm\claude.cmd",
-        r"C:\Users\admin\AppData\Roaming\npm\claude",
+        os.path.join(os.environ.get("APPDATA", ""), "npm", "claude.cmd"),
+        os.path.join(os.environ.get("APPDATA", ""), "npm", "claude"),
     ]
+    # VS Code extension ships claude.exe — discover any installed version
+    vscode_pattern = os.path.join(
+        os.environ.get("USERPROFILE", ""),
+        ".vscode", "extensions", "anthropic.claude-code-*",
+        "resources", "native-binary", "claude.exe",
+    )
+    candidates.extend(_glob.glob(vscode_pattern))
     for c in candidates:
         if c and Path(c).exists():
             return c
@@ -759,11 +1121,11 @@ def render_email_card(row, lang: str, tab_key: str):
                 if translated and isinstance(translated, str):
                     t_tab, o_tab = st.tabs(["译文", "原文"])
                     with t_tab:
-                        st.text(translated[:1200])
+                        st.text(translated)
                     with o_tab:
-                        st.text(body_text[:800])
+                        st.text(body_text)
                 else:
-                    st.text(body_text[:800])
+                    st.text(body_text)
 
         with col_b:
             st.markdown(f"**{t('status', lang)}:** `{row['status']}`")
@@ -971,9 +1333,9 @@ _msgs_html = ""
 for _m in st.session_state["chat_msgs"][-25:]:
     _txt = _html.escape(str(_m["content"])).replace("\n", "<br>")
     if _m["role"] == "user":
-        _msgs_html += f'<div style="text-align:right;margin:6px 0"><span style="background:#6366f1;color:#fff;padding:7px 12px;border-radius:14px 14px 2px 14px;display:inline-block;max-width:82%;font-size:13px;text-align:left">{_txt}</span></div>'
+        _msgs_html += f'<div style="text-align:right;margin:6px 0"><span style="background:#6366f1;color:#fff;padding:9px 14px;border-radius:14px 14px 2px 14px;display:inline-block;max-width:82%;font-size:15px;text-align:left;line-height:1.5">{_txt}</span></div>'
     else:
-        _msgs_html += f'<div style="text-align:left;margin:6px 0"><span style="background:#f1f5f9;color:#1e293b;padding:7px 12px;border-radius:14px 14px 14px 2px;display:inline-block;max-width:82%;font-size:13px">{_txt}</span></div>'
+        _msgs_html += f'<div style="text-align:left;margin:6px 0"><span style="background:#f1f5f9;color:#1e293b;padding:9px 14px;border-radius:14px 14px 14px 2px;display:inline-block;max-width:82%;font-size:15px;line-height:1.5">{_txt}</span></div>'
 
 st.markdown(f"""
 <style>
@@ -990,22 +1352,35 @@ st.markdown(f"""
 #chat-fab-label:hover {{ transform:scale(1.1); }}
 
 #chat-panel {{
-    display:none; position:fixed; bottom:90px; right:24px; width:370px; height:510px;
-    background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.2);
+    display:none; position:fixed; bottom:90px; right:24px; width:460px; height:600px;
+    background:#fff; border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.18);
     z-index:9998; flex-direction:column; overflow:hidden;
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }}
+#chat-resize-handle {{
+    position:absolute; top:0; left:0; width:28px; height:28px;
+    cursor:nw-resize; display:flex; align-items:center; justify-content:center;
+    color:rgba(255,255,255,0.6); font-size:13px; border-radius:18px 0 8px 0;
+    user-select:none; z-index:10;
+    transition:color 0.2s;
+}}
+#chat-resize-handle:hover {{ color:rgba(255,255,255,1); }}
 /* Show panel when checkbox is checked */
 #chat-toggle:checked ~ #chat-panel {{ display:flex; }}
 
 #chat-input {{
-    flex:1; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px;
-    font-size:13px; outline:none;
+    flex:1; padding:10px 14px; border:1px solid #e2e8f0; border-radius:10px;
+    font-size:15px; outline:none; font-family:inherit;
+    transition: border-color 0.2s;
 }}
+#chat-input:focus {{ border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.12); }}
 #chat-send {{
-    padding:9px 14px; background:#6366f1; color:#fff; border:none;
-    border-radius:8px; cursor:pointer; font-size:13px;
+    padding:10px 18px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border:none;
+    border-radius:10px; cursor:pointer; font-size:15px; font-weight:500;
+    box-shadow:0 3px 10px rgba(99,102,241,0.3); transition:opacity 0.2s;
 }}
+#chat-send:hover {{ opacity:0.9; }}
+#chat-send:disabled {{ opacity:0.5; cursor:not-allowed; }}
 </style>
 
 <!-- Hidden checkbox controls open/close state -->
@@ -1016,6 +1391,8 @@ st.markdown(f"""
 
 <!-- Chat panel (sibling of checkbox so CSS ~ selector works) -->
 <div id="chat-panel">
+  <!-- Top-left resize handle -->
+  <div id="chat-resize-handle" title="拖拽调整大小">⤢</div>
   <div style="padding:12px 16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:600;font-size:14px;display:flex;justify-content:space-between;align-items:center;">
     <span>💬 AI 邮件助手</span>
     <!-- Close button = label that unchecks the checkbox -->
@@ -1026,9 +1403,9 @@ st.markdown(f"""
   </div>
   <div style="display:flex;gap:8px;padding:10px 12px;border-top:1px solid #e2e8f0;background:#fff">
     <input id="chat-input" type="text" placeholder="查找邮件、总结、建议回复…" autocomplete="off"
-      style="flex:1;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none;">
+      style="flex:1;padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;font-size:15px;outline:none;font-family:inherit;">
     <button id="chat-send" type="button"
-      style="padding:9px 14px;background:#6366f1;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">发送</button>
+      style="padding:10px 18px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:15px;font-weight:500;">发送</button>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -1050,7 +1427,7 @@ _p._chatAddMsg = function(role, text) {
   var div = _d.createElement('div');
   div.style.cssText = 'margin:6px 0;text-align:' + (role==='user'?'right':'left');
   var span = _d.createElement('span');
-  span.style.cssText = 'padding:7px 12px;display:inline-block;max-width:82%;font-size:13px;white-space:pre-wrap;' +
+  span.style.cssText = 'padding:9px 14px;display:inline-block;max-width:82%;font-size:15px;line-height:1.5;white-space:pre-wrap;' +
     (role==='user'
       ? 'background:#6366f1;color:#fff;border-radius:14px 14px 2px 14px;text-align:left'
       : 'background:#f1f5f9;color:#1e293b;border-radius:14px 14px 14px 2px;');
@@ -1085,6 +1462,33 @@ _p._chatSend = function() {
     .catch(function(e){ if (loadSpan) loadSpan.textContent = '⚠️ ' + e; })
     .finally(function(){ if (btn) btn.disabled = false; });
 };
+
+// Resize from top-left handle
+if (!_p._chatResizeSet) {
+  _p._chatResizeSet = true;
+  _d.addEventListener('mousedown', function(e) {
+    if (!e.target || e.target.id !== 'chat-resize-handle') return;
+    e.preventDefault();
+    var panel = _d.getElementById('chat-panel');
+    if (!panel) return;
+    var startX = e.clientX, startY = e.clientY;
+    var startW = panel.offsetWidth, startH = panel.offsetHeight;
+    function onMove(ev) {
+      var dx = startX - ev.clientX;  // dragging left = wider
+      var dy = startY - ev.clientY;  // dragging up = taller
+      var newW = Math.max(320, startW + dx);
+      var newH = Math.max(400, startH + dy);
+      panel.style.width = newW + 'px';
+      panel.style.height = newH + 'px';
+    }
+    function onUp() {
+      _d.removeEventListener('mousemove', onMove);
+      _d.removeEventListener('mouseup', onUp);
+    }
+    _d.addEventListener('mousemove', onMove);
+    _d.addEventListener('mouseup', onUp);
+  });
+}
 
 // Attach delegated events once in parent document
 if (!_p._chatEventsSet) {

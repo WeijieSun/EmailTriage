@@ -19,6 +19,9 @@ data/
 # Chat history (contains email content)
 data/chat_history.json
 
+# Logs
+*.log
+
 # OS
 .DS_Store
 Thumbs.db
